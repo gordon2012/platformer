@@ -1,0 +1,9 @@
+{
+  "name": "phaser",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "browser-sync start --server --files=\"**/*.js\""
+  }
+}
