@@ -4,6 +4,17 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "start": "browser-sync start --server --files=\"**/*.js\""
+    "start": "browser-sync start --server --serveStatic \"./src\" --files=\"./src\"",
+    "build": "webpack",
+    "deploy": "surge src platformer.gordondoskas.com"
+
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "webpack": "^2.4.1"
   }
 }

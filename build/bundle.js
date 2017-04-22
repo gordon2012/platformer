@@ -1,4 +1,79 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/public/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+__webpack_require__(1);
 // Hero
 //
 function Hero(game, x, y) {
@@ -16,58 +91,57 @@ function Hero(game, x, y) {
 Hero.prototype = Object.create(Phaser.Sprite.prototype);
 Hero.prototype.constructor = Hero;
 
-Hero.prototype.move = function(direction) {
-    const SPEED = 200;
+Hero.prototype.move = function (direction) {
+    var SPEED = 200;
     this.body.velocity.x = direction * SPEED;
     // this.x += direction * 2.5
 
-    if(this.body.velocity.x < 0) {
+    if (this.body.velocity.x < 0) {
         this.scale.x = -1;
-    } else if(this.body.velocity.x > 0) {
+    } else if (this.body.velocity.x > 0) {
         this.scale.x = 1;
     }
 };
 
-Hero.prototype.jump = function() {
-    const JUMP_SPEED = 600;
-    let canJump = this.body.touching.down;
+Hero.prototype.jump = function () {
+    var JUMP_SPEED = 600;
+    var canJump = this.body.touching.down;
 
-    if(canJump) {
-        this.body.velocity.y = -JUMP_SPEED
+    if (canJump) {
+        this.body.velocity.y = -JUMP_SPEED;
     }
     return canJump;
-}
+};
 
-Hero.prototype.bounce = function() {
-    const BOUNCE_SPEED = 200;
+Hero.prototype.bounce = function () {
+    var BOUNCE_SPEED = 200;
     this.body.velocity.y = -BOUNCE_SPEED;
 };
 
-Hero.prototype.update = function() {
+Hero.prototype.update = function () {
     // Update sprite animation if needed
-    let animationName = this._getAnimationName();
-    if(this.animations.name !== animationName) {
+    var animationName = this._getAnimationName();
+    if (this.animations.name !== animationName) {
         this.animations.play(animationName);
     }
-}
+};
 
-Hero.prototype._getAnimationName = function() {
-    let name = 'stop' // default
+Hero.prototype._getAnimationName = function () {
+    var name = 'stop'; // default
 
-    if(this.body.velocity.y < 0) {
+    if (this.body.velocity.y < 0) {
         // Jumping
         name = 'jump';
-    } else if(this.body.velocity.y >= 0 && !this.body.touching.down) {
+    } else if (this.body.velocity.y >= 0 && !this.body.touching.down) {
         // Falling
         name = 'fall';
-    } else if(this.body.velocity.x !== 0 && this.body.touching.down) {
+    } else if (this.body.velocity.x !== 0 && this.body.touching.down) {
         // Running
         name = 'run';
     }
 
     return name;
-}
-
+};
 
 // Spider
 //
@@ -76,8 +150,8 @@ function Spider(game, x, y) {
 
     this.anchor.set(0.5);
 
-    this.animations.add('crawl', [0,1,2], 8, true);
-    this.animations.add('die', [0,4,0,4,0,4,3,3,3,3,3,3], 12);
+    this.animations.add('crawl', [0, 1, 2], 8, true);
+    this.animations.add('die', [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3], 12);
     this.animations.play('crawl');
 
     this.game.physics.enable(this);
@@ -90,25 +164,24 @@ Spider.SPEED = 100;
 Spider.prototype = Object.create(Phaser.Sprite.prototype);
 Spider.prototype.constructor = Spider;
 
-Spider.prototype.update = function() {
-    if(this.body.touching.right || this.body.blocked.right) {
+Spider.prototype.update = function () {
+    if (this.body.touching.right || this.body.blocked.right) {
         this.body.velocity.x = -Spider.SPEED;
-    } else if(this.body.touching.left || this.body.blocked.left) {
+    } else if (this.body.touching.left || this.body.blocked.left) {
         this.body.velocity.x = Spider.SPEED;
     }
 };
 
-Spider.prototype.die = function() {
+Spider.prototype.die = function () {
     this.body.enable = false;
 
-    this.animations.play('die').onComplete.addOnce(function() {
+    this.animations.play('die').onComplete.addOnce(function () {
         this.kill();
     }, this);
 };
 
-
 // Number of levels
-const LEVEL_COUNT = 2;
+var LEVEL_COUNT = 2;
 
 // PlayState
 //
@@ -116,7 +189,7 @@ PlayState = {};
 
 // lifecycle methods
 //
-PlayState.init = function(data) {
+PlayState.init = function (data) {
     this.game.renderer.renderSession.roundPixels = true;
     this.keys = this.game.input.keyboard.addKeys({
         left: Phaser.KeyCode.LEFT,
@@ -124,9 +197,9 @@ PlayState.init = function(data) {
         up: Phaser.KeyCode.UP
     });
 
-    this.keys.up.onDown.add(function() {
-        let didJump = this.hero.jump();
-        if(didJump) {
+    this.keys.up.onDown.add(function () {
+        var didJump = this.hero.jump();
+        if (didJump) {
             this.sfx.jump.play();
         }
     }, this);
@@ -141,9 +214,9 @@ PlayState.init = function(data) {
     this.level = (data.level || 0) % LEVEL_COUNT;
 };
 
-PlayState.preload = function() {
-    this.game.load.json('level:0', 'data/level00.json')
-    this.game.load.json('level:1', 'data/level01.json')
+PlayState.preload = function () {
+    this.game.load.json('level:0', 'data/level00.json');
+    this.game.load.json('level:1', 'data/level01.json');
     this.game.load.image('background', 'images/background.png');
 
     // this.game.load.image('hero', 'images/hero_stopped.png');
@@ -177,13 +250,12 @@ PlayState.preload = function() {
     // Key
     this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
 
-
     // Door, key
     this.game.load.spritesheet('door', 'images/door.png', 42, 66);
     this.game.load.image('key', 'images/key.png');
 };
 
-PlayState.create = function() {
+PlayState.create = function () {
     this.game.add.image(0, 0, 'background');
 
     // Door group
@@ -201,34 +273,32 @@ PlayState.create = function() {
     };
 
     // this._loadLevel(this.game.cache.getJSON('level:1'));
-    this._loadLevel(this.game.cache.getJSON(`level:${this.level}`));
+    this._loadLevel(this.game.cache.getJSON('level:' + this.level));
 
     // Load HUD
     this._createHUD();
+};
 
-}
-
-PlayState.update = function() {
+PlayState.update = function () {
     this._handleCollisions();
     this._handleInput();
-    this.coinFont.text = `x${this.coinPickupCount}`;
+    this.coinFont.text = 'x' + this.coinPickupCount;
     this.keyIcon.frame = this.hasKey ? 1 : 0;
 };
 
 // custom methods
 //
-PlayState._handleInput = function() {
-    if(this.keys.left.isDown) {
+PlayState._handleInput = function () {
+    if (this.keys.left.isDown) {
         this.hero.move(-1);
-    } else if(this.keys.right.isDown) {
+    } else if (this.keys.right.isDown) {
         this.hero.move(1);
-    }
-    else {
+    } else {
         this.hero.move(0);
     }
 };
 
-PlayState._handleCollisions = function() {
+PlayState._handleCollisions = function () {
     this.game.physics.arcade.collide(this.hero, this.platforms);
     this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin, null, this);
 
@@ -241,14 +311,14 @@ PlayState._handleCollisions = function() {
     this.game.physics.arcade.overlap(this.hero, this.key, this._onHeroVsKey, null, this);
 
     // Door collision
-    this.game.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor, function(hero, door) {
+    this.game.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor, function (hero, door) {
         return this.hasKey && hero.body.touching.down;
     }, this);
 };
 
 // Key collision
 //
-PlayState._onHeroVsKey = function(hero, key) {
+PlayState._onHeroVsKey = function (hero, key) {
     this.sfx.key.play();
     key.kill();
     this.hasKey = true;
@@ -256,16 +326,15 @@ PlayState._onHeroVsKey = function(hero, key) {
 
 // Door collision
 //
-PlayState._onHeroVsDoor = function(hero, door) {
+PlayState._onHeroVsDoor = function (hero, door) {
     this.sfx.door.play();
     // this.game.state.restart();
 
     // Go to the next level
-    this.game.state.restart(true, false, {level: this.level + 1});
+    this.game.state.restart(true, false, { level: this.level + 1 });
+};
 
-}
-
-PlayState._loadLevel = function(data) {
+PlayState._loadLevel = function (data) {
     this.platforms = this.game.add.group();
     this.coins = this.game.add.group();
     this.spiders = this.game.add.group();
@@ -274,7 +343,7 @@ PlayState._loadLevel = function(data) {
     this.enemyWalls.visible = false;
 
     data.platforms.forEach(this._spawnPlatform, this);
-    this._spawnCharacters({hero: data.hero, spiders: data.spiders});
+    this._spawnCharacters({ hero: data.hero, spiders: data.spiders });
 
     data.coins.forEach(this._spawnCoin, this);
 
@@ -282,12 +351,12 @@ PlayState._loadLevel = function(data) {
     this._spawnDoor(data.door.x, data.door.y);
     this._spawnKey(data.key.x, data.key.y);
 
-    const GRAVITY = 1200;
+    var GRAVITY = 1200;
     this.game.physics.arcade.gravity.y = GRAVITY;
 };
 
-PlayState._spawnPlatform = function(platform) {
-    let sprite = this.platforms.create(platform.x, platform.y, platform.image);
+PlayState._spawnPlatform = function (platform) {
+    var sprite = this.platforms.create(platform.x, platform.y, platform.image);
     this.game.physics.enable(sprite);
     sprite.body.allowGravity = false;
     sprite.body.immovable = true;
@@ -296,8 +365,8 @@ PlayState._spawnPlatform = function(platform) {
     this._spawnEnemyWall(platform.x + sprite.width, platform.y, 'right');
 };
 
-PlayState._spawnEnemyWall = function(x, y, side) {
-    let sprite = this.enemyWalls.create(x, y, 'invisible-wall');
+PlayState._spawnEnemyWall = function (x, y, side) {
+    var sprite = this.enemyWalls.create(x, y, 'invisible-wall');
 
     sprite.anchor.set(side === 'left' ? 1 : 0, 1);
 
@@ -306,68 +375,64 @@ PlayState._spawnEnemyWall = function(x, y, side) {
     sprite.body.allowGravity = false;
 };
 
-PlayState._spawnCoin = function(coin) {
-    let sprite = this.coins.create(coin.x, coin.y, 'coin');
+PlayState._spawnCoin = function (coin) {
+    var sprite = this.coins.create(coin.x, coin.y, 'coin');
     sprite.anchor.set(0.5, 0.5);
 
     this.game.physics.enable(sprite);
     sprite.body.allowGravity = false;
 
-    sprite.animations.add('rotate', [0,1,2,1], 6, true);
+    sprite.animations.add('rotate', [0, 1, 2, 1], 6, true);
     sprite.animations.play('rotate');
-}
+};
 
 // Door, key
 //
-PlayState._spawnDoor = function(x, y) {
+PlayState._spawnDoor = function (x, y) {
     this.door = this.bgDecoration.create(x, y, 'door');
     this.door.anchor.setTo(0.5, 1);
     this.game.physics.enable(this.door);
     this.door.body.allowGravity = false;
-}
-PlayState._spawnKey = function(x, y) {
+};
+PlayState._spawnKey = function (x, y) {
     this.key = this.bgDecoration.create(x, y, 'key');
     this.key.anchor.set(0.5, 0.5);
     this.game.physics.enable(this.key);
     this.key.body.allowGravity = false;
 
     // Animation
-    this.key.y-= 3;
-    this.game.add.tween(this.key)
-        .to({y: this.key.y + 6}, 800, Phaser.Easing.Sinusoidal.InOut)
-        .yoyo(true)
-        .loop()
-        .start();
+    this.key.y -= 3;
+    this.game.add.tween(this.key).to({ y: this.key.y + 6 }, 800, Phaser.Easing.Sinusoidal.InOut).yoyo(true).loop().start();
 };
 
-PlayState._onHeroVsCoin = function(hero, coin) {
+PlayState._onHeroVsCoin = function (hero, coin) {
     this.sfx.coin.play();
     coin.kill();
     this.coinPickupCount++;
-}
+};
 
-PlayState._onHeroVsEnemy = function(hero, enemy) {
-    if(hero.body.velocity.y > 0) {
+PlayState._onHeroVsEnemy = function (hero, enemy) {
+    if (hero.body.velocity.y > 0) {
         hero.bounce();
         enemy.die();
         this.sfx.stomp.play();
     } else {
         this.sfx.stomp.play();
-        this.game.state.restart(true, false, {level: this.level});
+        this.game.state.restart(true, false, { level: this.level });
     }
-}
+};
 
-PlayState._spawnCharacters = function(data) {
+PlayState._spawnCharacters = function (data) {
     this.hero = new Hero(this.game, data.hero.x, data.hero.y);
     this.game.add.existing(this.hero);
 
-    data.spiders.forEach(function(spider) {
-        let sprite = new Spider(this.game, spider.x, spider.y);
+    data.spiders.forEach(function (spider) {
+        var sprite = new Spider(this.game, spider.x, spider.y);
         this.spiders.add(sprite);
     }, this);
 };
 
-PlayState._createHUD = function() {
+PlayState._createHUD = function () {
     this.hud = this.game.add.group();
     this.hud.position.set(10, 10);
 
@@ -377,22 +442,38 @@ PlayState._createHUD = function() {
     this.hud.add(this.keyIcon);
 
     // Retro font
-    const NUMBERS_STR = '0123456789X ';
+    var NUMBERS_STR = '0123456789X ';
     this.coinFont = this.game.add.retroFont('font:numbers', 20, 26, NUMBERS_STR, 6);
 
     // Coins
-    let coinIcon = this.game.make.image(this.keyIcon.width + 7, 0, 'icon:coin');
+    var coinIcon = this.game.make.image(this.keyIcon.width + 7, 0, 'icon:coin');
     this.hud.add(coinIcon);
 
     // Coin score
-    let coinScoreImg = this.game.make.image(coinIcon.x + coinIcon.width, coinIcon.height / 2, this.coinFont);
+    var coinScoreImg = this.game.make.image(coinIcon.x + coinIcon.width, coinIcon.height / 2, this.coinFont);
     coinScoreImg.anchor.set(0, 0.5);
     this.hud.add(coinScoreImg);
-}
+};
 
-window.onload = function() {
-    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
+window.onload = function () {
+    var game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
 
     game.state.add('play', PlayState);
-    game.state.start('play', true, false, {level: 0});
-}
+    game.state.start('play', true, false, { level: 0 });
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "index.html";
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(0);
+
+
+/***/ })
+/******/ ]);
