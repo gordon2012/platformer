@@ -5,12 +5,11 @@ TODO:
 - Restructure folders
 - Move asset definitions to some kind of manifest
 
-- Replace prototype inheritance with ES6 classes
-- Hero
 DOING:
 
 DONE:
-- Spider
+- Replace Spider prototype with ES6 class
+- Replace Hero prototype with ES6 class
 
 
 */
@@ -18,70 +17,72 @@ DONE:
 // require('file-loader?name=[name].[ext]!./index.html'); // WIP
 // Hero
 //
-function Hero(game, x, y) {
-    Phaser.Sprite.call(this, game, x, y, 'hero');
-    this.anchor.set(0.5, 0.5);
-    this.game.physics.enable(this);
-    this.body.collideWorldBounds = true;
+class Hero extends Phaser.Sprite {
+    constructor(game, x, y) {
+        super(game, x, y);
 
-    // Animations
-    this.animations.add('stop', [0]);
-    this.animations.add('run', [1, 2], 8, true); // 8fps looped
-    this.animations.add('jump', [3]);
-    this.animations.add('fall', [4]);
-}
-Hero.prototype = Object.create(Phaser.Sprite.prototype);
-Hero.prototype.constructor = Hero;
+        Phaser.Sprite.call(this, game, x, y, 'hero');
+        this.anchor.set(0.5, 0.5);
+        this.game.physics.enable(this);
+        this.body.collideWorldBounds = true;
 
-Hero.prototype.move = function(direction) {
-    const SPEED = 200;
-    this.body.velocity.x = direction * SPEED;
-    // this.x += direction * 2.5
-
-    if(this.body.velocity.x < 0) {
-        this.scale.x = -1;
-    } else if(this.body.velocity.x > 0) {
-        this.scale.x = 1;
+        // Animations
+        this.animations.add('stop', [0]);
+        this.animations.add('run', [1, 2], 8, true); // 8fps looped
+        this.animations.add('jump', [3]);
+        this.animations.add('fall', [4]);
     }
-};
 
-Hero.prototype.jump = function() {
-    const JUMP_SPEED = 600;
-    let canJump = this.body.touching.down;
+    move(direction) {
+        const SPEED = 200;
+        this.body.velocity.x = direction * SPEED;
+        // this.x += direction * 2.5
 
-    if(canJump) {
-        this.body.velocity.y = -JUMP_SPEED
+        if(this.body.velocity.x < 0) {
+            this.scale.x = -1;
+        } else if(this.body.velocity.x > 0) {
+            this.scale.x = 1;
+        }
     }
-    return canJump;
-}
 
-Hero.prototype.bounce = function() {
-    const BOUNCE_SPEED = 200;
-    this.body.velocity.y = -BOUNCE_SPEED;
-};
+    jump() {
+        const JUMP_SPEED = 600;
+        let canJump = this.body.touching.down;
 
-Hero.prototype.update = function() {
-    // Update sprite animation if needed
-    let animationName = this._getAnimationName();
-    if(this.animations.name !== animationName) {
-        this.animations.play(animationName);
+        if(canJump) {
+            this.body.velocity.y = -JUMP_SPEED
+        }
+        return canJump;
     }
-}
 
-Hero.prototype._getAnimationName = function() {
-    let name = 'stop' // default
-
-    if(this.body.velocity.y < 0) {
-        // Jumping
-        name = 'jump';
-    } else if(this.body.velocity.y >= 0 && !this.body.touching.down) {
-        // Falling
-        name = 'fall';
-    } else if(this.body.velocity.x !== 0 && this.body.touching.down) {
-        // Running
-        name = 'run';
+    bounce() {
+        const BOUNCE_SPEED = 200;
+        this.body.velocity.y = -BOUNCE_SPEED;
     }
-    return name;
+
+    update() {
+        // Update sprite animation if needed
+        let animationName = this._getAnimationName();
+        if(this.animations.name !== animationName) {
+            this.animations.play(animationName);
+        }
+    }
+
+    _getAnimationName() {
+        let name = 'stop' // default
+
+        if(this.body.velocity.y < 0) {
+            // Jumping
+            name = 'jump';
+        } else if(this.body.velocity.y >= 0 && !this.body.touching.down) {
+            // Falling
+            name = 'fall';
+        } else if(this.body.velocity.x !== 0 && this.body.touching.down) {
+            // Running
+            name = 'run';
+        }
+        return name;
+    }
 }
 
 
