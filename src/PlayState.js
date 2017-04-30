@@ -27,7 +27,7 @@ PlayState.init = function(data) {
     // Player has key?
     this.hasKey = false;
 
-    this.level = (data.level || 1) % this.LEVEL_COUNT;
+    this.level = (data.level || 0) % this.LEVEL_COUNT;
 };
 
 PlayState.preload = function() {

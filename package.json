@@ -4,11 +4,11 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "start": "browser-sync start --no-notify --no-inject-changes --server --serveStatic \"./src\" --files=\"./src\"",
-    "build": "webpack --progress",
-    "deploy": "surge src platformer.gordondoskas.com",
+    "server": "browser-sync start --no-notify --no-inject-changes --server --serveStatic \"./build\" --files=\"./build\"",
+    "clean": "rm -r build/*",
+    "build": "yarn run clean && webpack --progress",
     "watch": "yarn run build -- --watch",
-    "dev": "browser-sync start --no-notify --no-inject-changes --server --serveStatic \"./build\" --files=\"./build\""
+    "deploy": "surge src platformer.gordondoskas.com"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
