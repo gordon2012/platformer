@@ -4,10 +4,11 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "start": "browser-sync start --server --serveStatic \"./src\" --files=\"./src\"",
-    "build": "webpack",
-    "deploy": "surge src platformer.gordondoskas.com"
-
+    "start": "browser-sync start --no-notify --no-inject-changes --server --serveStatic \"./src\" --files=\"./src\"",
+    "build": "webpack --progress",
+    "deploy": "surge src platformer.gordondoskas.com",
+    "watch": "yarn run build -- --watch",
+    "dev": "browser-sync start --no-notify --no-inject-changes --server --serveStatic \"./build\" --files=\"./build\""
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -16,5 +17,9 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "webpack": "^2.4.1"
+  },
+  "dependencies": {
+    "expose-loader": "^0.7.3",
+    "phaser-ce": "^2.7.7"
   }
 }

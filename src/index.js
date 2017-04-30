@@ -6,15 +6,22 @@ TODO:
 - Move asset definitions to some kind of manifest
 
 DOING:
+- Reorganize into modules
+
+
 
 DONE:
 - Replace Spider prototype with ES6 class
 - Replace Hero prototype with ES6 class
-
+- Add build to gitignore
+- Fix untracked files
+- Fixing webpack config to use phaser-ce
 
 */
+import 'pixi';
+import 'p2';
+import Phaser from 'phaser';
 
-// require('file-loader?name=[name].[ext]!./index.html'); // WIP
 // Hero
 //
 class Hero extends Phaser.Sprite {
@@ -134,7 +141,7 @@ const LEVEL_COUNT = 2;
 
 // PlayState
 //
-PlayState = {};
+let PlayState = {};
 
 // lifecycle methods
 //
