@@ -20,6 +20,15 @@
     "hero": {"x": 21, "y": 525},
     "spiders": [
     ],
+
+    "enemies": [
+        { "type": "RandomSpider", "x": 525, "y": 400 }
+    ],
+
+    "clip": [
+        { "type": "edge", "x": 525, "y": 400 }
+    ],
+
     "door": {"x": 231, "y": 546},
     "key": {"x": 525, "y": 336}
 }

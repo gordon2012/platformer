@@ -1,5 +1,6 @@
 import Hero from './Hero';
 import Spider from './Spider';
+import RandomSpider from './RandomSpider';
 
 let PlayState = {LEVEL_COUNT: 2};
 
@@ -35,7 +36,6 @@ PlayState.preload = function() {
     this.game.load.json('level:1', 'data/level01.json')
     this.game.load.image('background', 'images/background.png');
 
-    // this.game.load.image('hero', 'images/hero_stopped.png');
     this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
 
     this.game.load.image('ground', 'images/ground.png');
@@ -56,7 +56,7 @@ PlayState.preload = function() {
     this.game.load.audio('sfx:key', 'audio/key.wav');
     this.game.load.audio('sfx:door', 'audio/door.wav');
 
-    this.game.load.image('invisible-wall', 'images/invisible_wall.png');
+    this.game.load.image('invisible-wall', 'images/invisible_wall2.png');
 
     // HUD
     // Coin
@@ -65,7 +65,6 @@ PlayState.preload = function() {
     this.game.load.image('font:numbers', 'images/numbers.png');
     // Key
     this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
-
 
     // Door, key
     this.game.load.spritesheet('door', 'images/door.png', 42, 66);
@@ -89,12 +88,10 @@ PlayState.create = function() {
 
     };
 
-    // this._loadLevel(this.game.cache.getJSON('level:1'));
     this._loadLevel(this.game.cache.getJSON(`level:${this.level}`));
 
     // Load HUD
     this._createHUD();
-
 }
 
 PlayState.update = function() {
@@ -124,7 +121,12 @@ PlayState._handleCollisions = function() {
     this.game.physics.arcade.collide(this.spiders, this.platforms);
     this.game.physics.arcade.collide(this.spiders, this.enemyWalls);
 
+    this.game.physics.arcade.collide(this.randomSpiders, this.platforms);
+
+    this.game.physics.arcade.overlap(this.randomSpiders, this.screenWalls, this._onEnemyVsClip, null, this);
+
     this.game.physics.arcade.overlap(this.hero, this.spiders, this._onHeroVsEnemy, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.randomSpiders, this._onHeroVsEnemy, null, this);
 
     // Key collision
     this.game.physics.arcade.overlap(this.hero, this.key, this._onHeroVsKey, null, this);
@@ -147,11 +149,9 @@ PlayState._onHeroVsKey = function(hero, key) {
 //
 PlayState._onHeroVsDoor = function(hero, door) {
     this.sfx.door.play();
-    // this.game.state.restart();
 
     // Go to the next level
     this.game.state.restart(true, false, {level: this.level + 1});
-
 }
 
 PlayState._loadLevel = function(data) {
@@ -159,11 +159,14 @@ PlayState._loadLevel = function(data) {
     this.coins = this.game.add.group();
     this.spiders = this.game.add.group();
 
+    this.randomSpiders = this.game.add.group();
+
     this.enemyWalls = this.game.add.group();
     this.enemyWalls.visible = false;
+    this.screenWalls = this.game.add.group();
 
     data.platforms.forEach(this._spawnPlatform, this);
-    this._spawnCharacters({hero: data.hero, spiders: data.spiders});
+    this._spawnCharacters({hero: data.hero, spiders: data.spiders, enemies: data.enemies});
 
     data.coins.forEach(this._spawnCoin, this);
 
@@ -181,13 +184,24 @@ PlayState._spawnPlatform = function(platform) {
     sprite.body.allowGravity = false;
     sprite.body.immovable = true;
 
-    this._spawnEnemyWall(platform.x, platform.y, 'left');
-    this._spawnEnemyWall(platform.x + sprite.width, platform.y, 'right');
+    // Left
+    if(platform.x <= 0) {
+        this._spawnEnemyWall(this.screenWalls, platform.x, platform.y, 'left');
+    } else {
+        this._spawnEnemyWall(this.enemyWalls, platform.x, platform.y, 'left');
+    }
+
+    // Right
+    if(platform.x + sprite.width >= 960) { // TODO: width var
+        this._spawnEnemyWall(this.screenWalls, platform.x + sprite.width, platform.y, 'right');
+    } else {
+        this._spawnEnemyWall(this.enemyWalls, platform.x + sprite.width, platform.y, 'right');
+    }
 };
 
-PlayState._spawnEnemyWall = function(x, y, side) {
-    let sprite = this.enemyWalls.create(x, y, 'invisible-wall');
-
+PlayState._spawnEnemyWall = function(group, x, y, side, tint=0xff00ff) {
+    let sprite = group.create(x, y, 'invisible-wall');
+    sprite.tint = tint;
     sprite.anchor.set(side === 'left' ? 1 : 0, 1);
 
     this.game.physics.enable(sprite);
@@ -246,6 +260,10 @@ PlayState._onHeroVsEnemy = function(hero, enemy) {
     }
 }
 
+PlayState._onEnemyVsClip = function(enemy, clip) {
+    enemy.respawn();
+}
+
 PlayState._spawnCharacters = function(data) {
     this.hero = new Hero(this.game, data.hero.x, data.hero.y);
     this.game.add.existing(this.hero);
@@ -254,6 +272,17 @@ PlayState._spawnCharacters = function(data) {
         let sprite = new Spider(this.game, spider.x, spider.y, 100);
         this.spiders.add(sprite);
     }, this);
+
+    data.enemies && data.enemies.forEach((e) => {
+        console.log(e.type);
+        let sprite;
+        switch(e.type) {
+            case 'RandomSpider':
+            sprite = new RandomSpider(this.game, e.x, e.y, 100);
+            this.randomSpiders.add(sprite);
+        }
+    });
+
 };
 
 PlayState._createHUD = function() {

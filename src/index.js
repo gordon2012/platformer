@@ -18,6 +18,7 @@ require('file-loader?name=./audio/[name].[ext]!./assets/audio/stomp.wav');
 require('file-loader?name=./audio/[name].[ext]!./assets/audio/key.wav');
 require('file-loader?name=./audio/[name].[ext]!./assets/audio/door.wav');
 require('file-loader?name=./images/[name].[ext]!./assets/images/invisible_wall.png');
+require('file-loader?name=./images/[name].[ext]!./assets/images/invisible_wall2.png');
 require('file-loader?name=./images/[name].[ext]!./assets/images/coin_icon.png');
 require('file-loader?name=./images/[name].[ext]!./assets/images/numbers.png');
 require('file-loader?name=./images/[name].[ext]!./assets/images/key_icon.png');
