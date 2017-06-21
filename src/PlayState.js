@@ -1,6 +1,7 @@
 import Hero from './Hero';
 import Spider from './Spider';
 import RandomSpider from './RandomSpider';
+import MovingPlatform from './MovingPlatform';
 
 let PlayState = {LEVEL_COUNT: 2};
 
@@ -116,6 +117,7 @@ PlayState._handleInput = function() {
 
 PlayState._handleCollisions = function() {
     this.game.physics.arcade.collide(this.hero, this.platforms);
+    this.game.physics.arcade.collide(this.hero, this.movingPlatforms, this._onHeroVsMoving, null, this);
     this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin, null, this);
 
     this.game.physics.arcade.collide(this.spiders, this.platforms);
@@ -154,7 +156,21 @@ PlayState._onHeroVsDoor = function(hero, door) {
     this.game.state.restart(true, false, {level: this.level + 1});
 }
 
+// Moving Platform
+PlayState._onHeroVsMoving = function(hero, platform) {
+    if(!platform.lock.locked && hero.body.velocity.y > 0) {
+        platform.lock.locked = true;
+        // lockedto?
+        // platform.lock.locked = true;
+        platform.lock.target = hero;
+        // console.log(platform);
+        // this.lock.target = hero;
+        hero.body.velocity.y = 0;
+    }
+}
+
 PlayState._loadLevel = function(data) {
+    // console.log(data);
     this.platforms = this.game.add.group();
     this.coins = this.game.add.group();
     this.spiders = this.game.add.group();
@@ -167,6 +183,19 @@ PlayState._loadLevel = function(data) {
 
     data.platforms.forEach(this._spawnPlatform, this);
     this._spawnCharacters({hero: data.hero, spiders: data.spiders, enemies: data.enemies});
+
+    // Moving Platforms
+    this.movingPlatforms = this.game.add.group();
+    data.movingPlatforms.forEach(function(e) {
+        // console.log(e);
+        // let sprite = this.movingPlatforms.create(e.x, e.y, e.image);
+        // this.game.physics.enable(sprite);
+        // sprite.body.allowGravity = false;
+        // sprite.body.immovable = true;
+        let sprite = new MovingPlatform(this.game, e.x, e.y, e.image, this.movingPlatforms, e.motion);
+        //sprite.addMotionPath(e.motion);
+    }, this);
+
 
     data.coins.forEach(this._spawnCoin, this);
 
@@ -274,7 +303,6 @@ PlayState._spawnCharacters = function(data) {
     }, this);
 
     data.enemies && data.enemies.forEach((e) => {
-        console.log(e.type);
         let sprite;
         switch(e.type) {
             case 'RandomSpider':

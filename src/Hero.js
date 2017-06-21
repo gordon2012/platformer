@@ -51,6 +51,10 @@ export default class extends Phaser.Sprite {
         }
     }
 
+    prerender() {
+        console.log('hero prerender');
+    }
+
     _getAnimationName() {
         let name = 'stop' // default
 
