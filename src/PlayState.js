@@ -186,7 +186,7 @@ PlayState._loadLevel = function(data) {
 
     // Moving Platforms
     this.movingPlatforms = this.game.add.group();
-    data.movingPlatforms.forEach(function(e) {
+    data.movingPlatforms && data.movingPlatforms.forEach(function(e) {
         // console.log(e);
         // let sprite = this.movingPlatforms.create(e.x, e.y, e.image);
         // this.game.physics.enable(sprite);
